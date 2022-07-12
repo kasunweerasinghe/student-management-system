@@ -10,6 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import view.tdm.StudentTM;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,9 +28,10 @@ public class StudentFormController {
     public JFXButton btnAddNewStudent;
     public JFXButton btnSave;
     public JFXButton btnDelete;
-    public TableView tblStudent;
+    public TableView<StudentTM> tblStudent;
 
     public void initialize(){
+
 
     }
 
@@ -59,6 +61,34 @@ public class StudentFormController {
    
 
     public void btnDeleteOnAction(ActionEvent actionEvent) {
+        /*Delete Customer*/
+        String id = tblStudent.getSelectionModel().getSelectedItem().getId();
+        try {
+            if (!existCustomer(id)) {
+                new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
+            }
+            Connection connection = DBConnection.getDbConnection().getConnection();
+            PreparedStatement pstm = connection.prepareStatement("DELETE FROM Student WHERE studentId=?");
+            pstm.setString(1, id);
+            pstm.executeUpdate();
+
+            tblStudent.getItems().remove(tblStudent.getSelectionModel().getSelectedItem());
+            tblStudent.getSelectionModel().clearSelection();
+            initUI();
+
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, "Failed to delete the customer " + id).show();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        PreparedStatement pstm = connection.prepareStatement("SELECT studentId FROM Student WHERE studentId=?");
+        pstm.setString(1, id);
+        return pstm.executeQuery().next();
     }
 
     public void btnSaveOnAction(ActionEvent actionEvent) {
@@ -104,13 +134,13 @@ public class StudentFormController {
         if (tblStudent.getItems().isEmpty()) {
             return "C00-001";
         } else {
-            String id = getLastCustomerId();
+            String id = getLastStudentId();
             int newCustomerId = Integer.parseInt(id.replace("C", "")) + 1;
             return String.format("C00-%03d", newCustomerId);
         }
 
     }
-    private String getLastCustomerId() {
+    private String getLastStudentId() {
         List<StudentTM> tempStudentsList = new ArrayList<>(tblStudent.getItems());
         Collections.sort(tempStudentsList);
         return tempStudentsList.get(tempStudentsList.size() - 1).getId();
