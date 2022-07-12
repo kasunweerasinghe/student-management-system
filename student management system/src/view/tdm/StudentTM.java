@@ -1,6 +1,6 @@
 package view.tdm;
 
-public class StudentTM {
+public class StudentTM implements Comparable<StudentTM>{
     private String id;
     private String name;
     private String email;
@@ -78,5 +78,10 @@ public class StudentTM {
                 ", address='" + address + '\'' +
                 ", nic='" + nic + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(StudentTM o) {
+        return 0;
     }
 }

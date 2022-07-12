@@ -10,10 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import view.tdm.StudentTM;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -66,11 +63,28 @@ public class StudentFormController {
         });
 
         txtNIc.setOnAction(event -> btnSave.fire());
-        loadAllCustomers();
+        loadAllStudents();
 
     }
 
-    private void loadAllCustomers() {
+    private void loadAllStudents() {
+        tblStudent.getItems().clear();
+        //Get all Students
+        try {
+            Connection connection = DBConnection.getDbConnection().getConnection();
+            Statement stm = connection.createStatement();
+            ResultSet rst = stm.executeQuery("SELECT * FROM Student");
+
+            while (rst.next()) {
+                tblStudent.getItems().add(new StudentTM(rst.getString("id"), rst.getString("name"), rst.getString("email"),rst.getString("contact"),rst.getString("address"),rst.getString("nic")));
+            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
+
+
     }
 
     public void btnAddNewStudentOnAction(ActionEvent actionEvent) {
@@ -99,11 +113,11 @@ public class StudentFormController {
    
 
     public void btnDeleteOnAction(ActionEvent actionEvent) {
-        //Delete Customer
+        //Delete Student
         String id = tblStudent.getSelectionModel().getSelectedItem().getId();
         try {
             if (!existStudent(id)) {
-                new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
+                new Alert(Alert.AlertType.ERROR, "There is no such Student associated with the id " + id).show();
             }
             Connection connection = DBConnection.getDbConnection().getConnection();
             PreparedStatement pstm = connection.prepareStatement("DELETE FROM Student WHERE studentId=?");
@@ -115,7 +129,7 @@ public class StudentFormController {
             initUI();
 
         } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, "Failed to delete the customer " + id).show();
+            new Alert(Alert.AlertType.ERROR, "Failed to delete the Student " + id).show();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -130,6 +144,68 @@ public class StudentFormController {
     }
 
     public void btnSaveOnAction(ActionEvent actionEvent) {
+        String id = txtStudentID.getText();
+        String name = txtStudentName.getText();
+        String email = txtEmail.getText();
+        String contact = txtContact.getText();
+        String address = txtAddress.getText();
+        String nic = txtNIc.getText();
+
+
+        if (btnSave.getText().equalsIgnoreCase("save")) {
+            //Save Student
+            try {
+                if (existStudent(id)) {
+                    new Alert(Alert.AlertType.ERROR, id + " already exists").show();
+                }
+                Connection connection = DBConnection.getDbConnection().getConnection();
+                PreparedStatement pstm = connection.prepareStatement("INSERT INTO Student (studentId,studentName, email,contact,address,nic) VALUES (?,?,?,?,?,?)");
+                pstm.setString(1, id);
+                pstm.setString(2, name);
+                pstm.setString(3, email);
+                pstm.setString(4, contact);
+                pstm.setString(5, address);
+                pstm.setString(6, nic);
+                pstm.executeUpdate();
+
+                tblStudent.getItems().add(new StudentTM(id, name, email,contact,address,nic));
+            } catch (SQLException e) {
+                new Alert(Alert.AlertType.ERROR, "Failed to save the student " + e.getMessage()).show();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            //Update Student
+            try {
+                if (!existStudent(id)) {
+                    new Alert(Alert.AlertType.ERROR, "There is no such Student associated with the id " + id).show();
+                }
+                Connection connection = DBConnection.getDbConnection().getConnection();
+                PreparedStatement pstm = connection.prepareStatement("UPDATE Student SET studentName=?, email=?, contact=?, address=?, nic=? WHERE studentId=?");
+                pstm.setString(1, name);
+                pstm.setString(2, email);
+                pstm.setString(3, contact);
+                pstm.setString(4, address);
+                pstm.setString(5, nic);
+                pstm.setString(6, id);
+                pstm.executeUpdate();
+            } catch (SQLException e) {
+                new Alert(Alert.AlertType.ERROR, "Failed to update the student " + id + e.getMessage()).show();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            StudentTM selectedStudent = tblStudent.getSelectionModel().getSelectedItem();
+            selectedStudent.setName(name);
+            selectedStudent.setEmail(email);
+            selectedStudent.setContact(contact);
+            selectedStudent.setAddress(address);
+            selectedStudent.setNic(nic);
+            tblStudent.refresh();
+        }
+
+        btnAddNewStudent.fire();
     }
     private void initUI() {
         txtStudentID.clear();
@@ -157,10 +233,10 @@ public class StudentFormController {
             ResultSet rst = connection.createStatement().executeQuery("SELECT studentId FROM Student ORDER BY studentId DESC LIMIT 1;");
             if (rst.next()) {
                 String id = rst.getString("id");
-                int newCustomerId = Integer.parseInt(id.replace("S-", "")) + 1;
-                return String.format("S-%03d", newCustomerId);
+                int newStudentId = Integer.parseInt(id.replace("S00-", "")) + 1;
+                return String.format("S00-%03d", newStudentId);
             } else {
-                return "C00-001";
+                return "S00-001";
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to generate a new id " + e.getMessage()).show();
@@ -168,14 +244,14 @@ public class StudentFormController {
             e.printStackTrace();
         }
 
-
         if (tblStudent.getItems().isEmpty()) {
-            return "C00-001";
+            return "S00-001";
         } else {
             String id = getLastStudentId();
-            int newCustomerId = Integer.parseInt(id.replace("C", "")) + 1;
-            return String.format("C00-%03d", newCustomerId);
+            int newStudentId = Integer.parseInt(id.replace("S", "")) + 1;
+            return String.format("S00-%03d", newStudentId);
         }
+
 
     }
     private String getLastStudentId() {
