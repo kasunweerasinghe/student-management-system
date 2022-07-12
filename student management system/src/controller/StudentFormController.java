@@ -6,6 +6,7 @@ import db.DBConnection;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import view.tdm.StudentTM;
 
@@ -31,8 +32,45 @@ public class StudentFormController {
     public TableView<StudentTM> tblStudent;
 
     public void initialize(){
+        tblStudent.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
+        tblStudent.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("name"));
+        tblStudent.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("email"));
+        tblStudent.getColumns().get(3).setCellValueFactory(new PropertyValueFactory<>("contact"));
+        tblStudent.getColumns().get(4).setCellValueFactory(new PropertyValueFactory<>("address"));
+        tblStudent.getColumns().get(5).setCellValueFactory(new PropertyValueFactory<>("nic"));
 
+        initUI();
 
+        tblStudent.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            btnDelete.setDisable(newValue == null);
+            btnSave.setText(newValue != null ? "Update" : "Save");
+            btnSave.setDisable(newValue == null);
+
+            if (newValue != null) {
+                txtStudentID.setText(newValue.getId());
+                txtStudentName.setText(newValue.getName());
+                txtEmail.setText(newValue.getEmail());
+                txtContact.setText(newValue.getContact());
+                txtAddress.setText(newValue.getAddress());
+                txtNIc.setText(newValue.getNic());
+
+                txtStudentID.setDisable(false);
+                txtStudentName.setDisable(false);
+                txtEmail.setDisable(false);
+                txtContact.setDisable(false);
+                txtAddress.setDisable(false);
+                txtNIc.setDisable(false);
+                
+                
+            }
+        });
+
+        txtNIc.setOnAction(event -> btnSave.fire());
+        loadAllCustomers();
+
+    }
+
+    private void loadAllCustomers() {
     }
 
     public void btnAddNewStudentOnAction(ActionEvent actionEvent) {
@@ -61,10 +99,10 @@ public class StudentFormController {
    
 
     public void btnDeleteOnAction(ActionEvent actionEvent) {
-        /*Delete Customer*/
+        //Delete Customer
         String id = tblStudent.getSelectionModel().getSelectedItem().getId();
         try {
-            if (!existCustomer(id)) {
+            if (!existStudent(id)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such customer associated with the id " + id).show();
             }
             Connection connection = DBConnection.getDbConnection().getConnection();
@@ -84,7 +122,7 @@ public class StudentFormController {
 
     }
 
-    boolean existCustomer(String id) throws SQLException, ClassNotFoundException {
+    boolean existStudent(String id) throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("SELECT studentId FROM Student WHERE studentId=?");
         pstm.setString(1, id);
