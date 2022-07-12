@@ -34,6 +34,26 @@ public class StudentFormController {
     }
 
     public void btnAddNewStudentOnAction(ActionEvent actionEvent) {
+        txtStudentID.setDisable(false);
+        txtStudentName.setDisable(false);
+        txtEmail.setDisable(false);
+        txtContact.setDisable(false);
+        txtAddress.setDisable(false);
+        txtNIc.setDisable(false);
+
+        txtStudentID.clear();
+        txtStudentID.setText(generateNewId());
+
+        txtStudentName.clear();
+        txtEmail.clear();
+        txtContact.clear();
+        txtAddress.clear();
+        txtNIc.clear();
+        txtStudentName.requestFocus();
+
+        btnSave.setDisable(false);
+        btnSave.setText("Save");
+        tblStudent.getSelectionModel().clearSelection();
     }
 
    
@@ -43,6 +63,26 @@ public class StudentFormController {
 
     public void btnSaveOnAction(ActionEvent actionEvent) {
     }
+    private void initUI() {
+        txtStudentID.clear();
+        txtStudentName.clear();
+        txtEmail.clear();
+        txtContact.clear();
+        txtAddress.clear();
+        txtNIc.clear();
+
+        txtStudentID.setDisable(true);
+        txtStudentName.setDisable(true);
+        txtEmail.setDisable(true);
+        txtContact.setDisable(true);
+        txtAddress.setDisable(true);
+        txtNIc.setDisable(true);
+
+        txtStudentID.setEditable(false);
+        btnSave.setDisable(true);
+        btnDelete.setDisable(true);
+    }
+
     private String generateNewId() {
         try {
             Connection connection = DBConnection.getDbConnection().getConnection();
