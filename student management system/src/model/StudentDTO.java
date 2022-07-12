@@ -1,6 +1,6 @@
-package view.tdm;
+package model;
 
-public class StudentTM {
+public class StudentDTO {
     private String id;
     private String name;
     private String email;
@@ -8,10 +8,10 @@ public class StudentTM {
     private String address;
     private String nic;
 
-    public StudentTM() {
+    public StudentDTO() {
     }
 
-    public StudentTM(String id, String name, String email, String contact, String address, String nic) {
+    public StudentDTO(String id, String name, String email, String contact, String address, String nic) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -70,7 +70,7 @@ public class StudentTM {
 
     @Override
     public String toString() {
-        return "StudentTM{" +
+        return "StudentDTO{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
