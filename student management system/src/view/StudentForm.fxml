@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.paint.RadialGradient?>
@@ -43,52 +44,52 @@
             </Label>
          </children>
       </Pane>
-      <JFXTextField fx:id="txtStudentID" labelFloat="true" layoutX="105.0" layoutY="127.0" prefHeight="27.0" prefWidth="232.0" promptText="Student ID">
+      <JFXTextField fx:id="txtStudentID" labelFloat="true" layoutX="105.0" layoutY="127.0" prefHeight="27.0" prefWidth="232.0" promptText="Student ID" unFocusColor="#8d3f78d4">
          <font>
-            <Font name="Arial" size="14.0" />
+            <Font name="Arial Italic" size="14.0" />
          </font>
       </JFXTextField>
-      <JFXTextField fx:id="txtStudentName" labelFloat="true" layoutX="407.0" layoutY="127.0" prefHeight="27.0" prefWidth="232.0" promptText="Student Name">
+      <JFXTextField fx:id="txtStudentName" labelFloat="true" layoutX="407.0" layoutY="127.0" prefHeight="27.0" prefWidth="232.0" promptText="Student Name" unFocusColor="#8d3f78d4">
          <font>
-            <Font name="Arial" size="14.0" />
+            <Font name="Arial Italic" size="14.0" />
          </font>
       </JFXTextField>
-      <JFXTextField fx:id="txtEmail" labelFloat="true" layoutX="105.0" layoutY="187.0" prefHeight="27.0" prefWidth="232.0" promptText="Email">
+      <JFXTextField fx:id="txtEmail" labelFloat="true" layoutX="105.0" layoutY="187.0" prefHeight="27.0" prefWidth="232.0" promptText="Email" unFocusColor="#8d3f78d4">
          <font>
-            <Font name="Arial" size="14.0" />
+            <Font name="Arial Italic" size="14.0" />
          </font>
       </JFXTextField>
-      <JFXTextField fx:id="txtContact" labelFloat="true" layoutX="407.0" layoutY="187.0" prefHeight="27.0" prefWidth="232.0" promptText="Contact">
+      <JFXTextField fx:id="txtContact" labelFloat="true" layoutX="407.0" layoutY="187.0" prefHeight="27.0" prefWidth="232.0" promptText="Contact" unFocusColor="#8d3f78d4">
          <font>
-            <Font name="Arial" size="14.0" />
+            <Font name="Arial Italic" size="14.0" />
          </font>
       </JFXTextField>
-      <JFXTextField fx:id="txtAddress" labelFloat="true" layoutX="105.0" layoutY="250.0" prefHeight="27.0" prefWidth="232.0" promptText="Address">
+      <JFXTextField fx:id="txtAddress" labelFloat="true" layoutX="105.0" layoutY="250.0" prefHeight="27.0" prefWidth="232.0" promptText="Address" unFocusColor="#8d3f78d4">
          <font>
-            <Font name="Arial" size="14.0" />
+            <Font name="Arial Italic" size="14.0" />
          </font>
       </JFXTextField>
-      <JFXTextField fx:id="txtNIc" labelFloat="true" layoutX="407.0" layoutY="250.0" prefHeight="27.0" prefWidth="232.0" promptText="NIC">
+      <JFXTextField fx:id="txtNIc" labelFloat="true" layoutX="407.0" layoutY="250.0" prefHeight="27.0" prefWidth="232.0" promptText="NIC" unFocusColor="#8d3f78d4">
          <font>
-            <Font name="Arial" size="14.0" />
+            <Font name="Arial Italic" size="14.0" />
          </font>
       </JFXTextField>
-      <JFXButton fx:id="btnAddNewStudent" buttonType="RAISED" layoutX="675.0" layoutY="82.0" onAction="#btnAddNewStudentOnAction" style="-fx-background-color: #27ae60; -fx-background-radius: 5;" text="+ New Student" textFill="WHITE">
+      <JFXButton fx:id="btnAddNewStudent" buttonType="RAISED" layoutX="706.0" layoutY="82.0" onAction="#btnAddNewStudentOnAction" prefHeight="27.0" prefWidth="96.0" style="-fx-background-color: #27ae60; -fx-background-radius: 5;" text="+ N E W   " textFill="WHITE">
          <font>
             <Font name="Arial Bold" size="14.0" />
          </font>
       </JFXButton>
-      <JFXButton fx:id="btnSave" buttonType="RAISED" layoutX="265.0" layoutY="332.0" onAction="#btnSaveOnAction" prefHeight="32.0" prefWidth="86.0" style="-fx-background-color: #27ae60; -fx-background-radius: 5;" text="Save" textFill="WHITE">
+      <JFXButton fx:id="btnSave" buttonType="RAISED" focusTraversable="false" layoutX="265.0" layoutY="316.0" onAction="#btnSaveOnAction" prefHeight="32.0" prefWidth="86.0" style="-fx-background-color: #27ae60; -fx-background-radius: 5;" text="Save" textFill="WHITE">
          <font>
             <Font name="Arial Bold" size="16.0" />
          </font>
       </JFXButton>
-      <JFXButton fx:id="btnDelete" buttonType="RAISED" layoutX="395.0" layoutY="332.0" onAction="#btnDeleteOnAction" prefHeight="32.0" prefWidth="86.0" style="-fx-background-color: #f1c40f; -fx-background-radius: 5;" text="Delete" textFill="WHITE">
+      <JFXButton fx:id="btnDelete" buttonType="RAISED" focusTraversable="false" layoutX="395.0" layoutY="316.0" onAction="#btnDeleteOnAction" prefHeight="32.0" prefWidth="86.0" style="-fx-background-color: #f1c40f; -fx-background-radius: 5;" text="Delete" textFill="WHITE">
          <font>
             <Font name="Arial Bold" size="16.0" />
          </font>
       </JFXButton>
-      <TableView fx:id="tblStudent" layoutX="14.0" layoutY="402.0" prefHeight="303.0" prefWidth="792.0">
+      <TableView fx:id="tblStudent" focusTraversable="false" layoutX="14.0" layoutY="402.0" prefHeight="303.0" prefWidth="792.0">
         <columns>
           <TableColumn prefWidth="95.0" text="Student ID" />
           <TableColumn prefWidth="168.0" text="Student Name" />
@@ -98,5 +99,6 @@
             <TableColumn prefWidth="137.0" text="NIC" />
         </columns>
       </TableView>
+      <TextField fx:id="txtSearch" layoutX="14.0" layoutY="358.0" prefHeight="27.0" prefWidth="232.0" />
    </children>
 </AnchorPane>

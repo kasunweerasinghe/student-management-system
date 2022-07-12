@@ -6,14 +6,13 @@ import db.DBConnection;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
+import model.StudentDTO;
 import view.tdm.StudentTM;
 
 import java.sql.*;
@@ -38,6 +37,7 @@ public class StudentFormController {
     public TableView<StudentTM> tblStudent;
     public Label lblDate;
     public Label lblTime;
+    public TextField txtSearch;
 
     public void initialize(){
         loadDateAndTime();
