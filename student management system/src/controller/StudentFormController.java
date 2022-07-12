@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXTextField;
 import db.DBConnection;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
@@ -27,6 +28,7 @@ public class StudentFormController {
     public JFXButton btnSave;
     public JFXButton btnDelete;
     public TableView<StudentTM> tblStudent;
+    public TableColumn colStudentId;
 
     public void initialize(){
         tblStudent.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -232,7 +234,7 @@ public class StudentFormController {
             Connection connection = DBConnection.getDbConnection().getConnection();
             ResultSet rst = connection.createStatement().executeQuery("SELECT studentId FROM Student ORDER BY studentId DESC LIMIT 1;");
             if (rst.next()) {
-                String id = rst.getString("id");
+                String id = rst.getString("studentId");
                 int newStudentId = Integer.parseInt(id.replace("S00-", "")) + 1;
                 return String.format("S00-%03d", newStudentId);
             } else {

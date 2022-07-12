@@ -1,6 +1,8 @@
 package model;
 
-public class StudentDTO {
+import java.io.Serializable;
+
+public class StudentDTO implements Serializable {
     private String id;
     private String name;
     private String email;

@@ -76,7 +76,7 @@
       </JFXButton>
       <TableView fx:id="tblStudent" layoutX="14.0" layoutY="402.0" prefHeight="303.0" prefWidth="686.0">
         <columns>
-          <TableColumn prefWidth="95.0" text="Student ID" />
+          <TableColumn fx:id="colStudentId" prefWidth="95.0" text="Student ID" />
           <TableColumn prefWidth="117.0" text="Student Name" />
             <TableColumn prefWidth="117.0" text="Email" />
             <TableColumn prefWidth="101.0" text="Contact" />
