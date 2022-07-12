@@ -37,7 +37,6 @@ public class StudentFormController {
     public TableView<StudentTM> tblStudent;
     public Label lblDate;
     public Label lblTime;
-    public TextField txtSearch;
 
     public void initialize(){
         loadDateAndTime();
