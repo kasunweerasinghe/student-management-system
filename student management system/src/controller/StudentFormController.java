@@ -3,17 +3,25 @@ package controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import db.DBConnection;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 import view.tdm.StudentTM;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class StudentFormController {
@@ -28,9 +36,11 @@ public class StudentFormController {
     public JFXButton btnSave;
     public JFXButton btnDelete;
     public TableView<StudentTM> tblStudent;
-    public TableColumn colStudentId;
+    public Label lblDate;
+    public Label lblTime;
 
     public void initialize(){
+        loadDateAndTime();
         tblStudent.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
         tblStudent.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("name"));
         tblStudent.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -59,8 +69,6 @@ public class StudentFormController {
                 txtContact.setDisable(false);
                 txtAddress.setDisable(false);
                 txtNIc.setDisable(false);
-                
-                
             }
         });
 
@@ -75,10 +83,11 @@ public class StudentFormController {
         try {
             Connection connection = DBConnection.getDbConnection().getConnection();
             Statement stm = connection.createStatement();
-            ResultSet rst = stm.executeQuery("SELECT * FROM Student");
+            ResultSet rst = stm.executeQuery("SELECT * FROM ijse.Student");
 
             while (rst.next()) {
-                tblStudent.getItems().add(new StudentTM(rst.getString("id"), rst.getString("name"), rst.getString("email"),rst.getString("contact"),rst.getString("address"),rst.getString("nic")));
+                //tblStudent.getItems().add(new StudentTM(rst.getString("id"), rst.getString("name"), rst.getString("email"),rst.getString("contact"),rst.getString("address"),rst.getString("nic")));
+                tblStudent.getItems().add(new StudentTM(rst.getString(1), rst.getString(2), rst.getString(3),rst.getString(4),rst.getString(5),rst.getString(6)));
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
@@ -122,7 +131,7 @@ public class StudentFormController {
                 new Alert(Alert.AlertType.ERROR, "There is no such Student associated with the id " + id).show();
             }
             Connection connection = DBConnection.getDbConnection().getConnection();
-            PreparedStatement pstm = connection.prepareStatement("DELETE FROM Student WHERE studentId=?");
+            PreparedStatement pstm = connection.prepareStatement("DELETE FROM ijse.Student WHERE studentId=?");
             pstm.setString(1, id);
             pstm.executeUpdate();
 
@@ -140,7 +149,7 @@ public class StudentFormController {
 
     boolean existStudent(String id) throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();
-        PreparedStatement pstm = connection.prepareStatement("SELECT studentId FROM Student WHERE studentId=?");
+        PreparedStatement pstm = connection.prepareStatement("SELECT studentId FROM ijse.Student WHERE studentId=?");
         pstm.setString(1, id);
         return pstm.executeQuery().next();
     }
@@ -260,6 +269,22 @@ public class StudentFormController {
         List<StudentTM> tempStudentsList = new ArrayList<>(tblStudent.getItems());
         Collections.sort(tempStudentsList);
         return tempStudentsList.get(tempStudentsList.size() - 1).getId();
+    }
+
+    private void loadDateAndTime() {
+        /*set date*/
+        lblDate.setText(new SimpleDateFormat("yyy-MM-dd").format(new Date()));
+        /*set time*/
+        Timeline clock=new Timeline(new KeyFrame(Duration.ZERO, e->{
+            LocalTime currentTime=LocalTime.now();
+            lblTime.setText(currentTime.getHour()+":"+
+                    currentTime.getMinute()+":"+
+                    currentTime.getSecond());
+        }),
+                new KeyFrame(Duration.seconds(1))
+        );
+        clock.setCycleCount(Animation.INDEFINITE);
+        clock.play();
     }
 
 }
